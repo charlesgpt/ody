@@ -1,0 +1,453 @@
+#intro-scene {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    opacity: 0;
+    overflow: hidden;
+}
+
+#intro-scene.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 1;
+}
+
+.intro-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.conversation-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.5) 30%,
+        rgba(0, 0, 0, 0.5) 70%,
+        rgba(0, 0, 0, 0.9) 100%
+    );
+    z-index: 2;
+}
+
+.conversation-container {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.narrative-text {
+    color: #ffffff;
+    font-size: 1.3rem;
+    text-align: center;
+    margin: 1rem auto;
+    padding: 0.5rem;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInDown 1s ease-out forwards 0.5s;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 1px;
+    line-height: 1.4;
+}
+
+.gods-dialogue {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 0.5rem;
+    opacity: 1;
+}
+
+.god-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    opacity: 0;
+    max-width: 100%;
+}
+
+.god-message.right {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.god-avatar {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+.god-avatar::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    z-index: -1;
+    animation: avatarGlow 3s ease-in-out infinite;
+}
+
+/* God-specific glow colors */
+.god-message.athena .god-avatar::before {
+    background: radial-gradient(circle, rgba(192, 192, 192, 0.3) 0%, transparent 70%);
+    box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
+}
+
+.god-message.poseidon .god-avatar::before {
+    background: radial-gradient(circle, rgba(65, 105, 225, 0.3) 0%, transparent 70%);
+    box-shadow: 0 0 20px rgba(65, 105, 225, 0.3);
+}
+
+.god-message.zeus .god-avatar::before {
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.god-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transform: scale(1);
+    transition: all 0.3s ease;
+}
+
+.message-content {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    border-radius: 15px;
+    position: relative;
+    flex-grow: 1;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: calc(100% - 90px);
+}
+
+.god-name {
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    opacity: 0;
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 1px;
+}
+
+.message-content p {
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.4;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    white-space: pre-wrap;
+    position: relative;
+    overflow: hidden;
+    width: 0;
+}
+
+.message-content p::after {
+    content: '|';
+    position: absolute;
+    right: -4px;
+    top: 0;
+    height: 100%;
+    background: currentColor;
+    width: 2px;
+    animation: cursorBlink 0.8s steps(2) infinite;
+}
+
+/* Animation delays and typing effect */
+.god-message:nth-child(1) {
+    animation: slideInLeft 0.5s ease-out forwards 1s;
+}
+
+.god-message:nth-child(1) .god-name {
+    animation: fadeIn 0.5s ease-out forwards 1.5s;
+}
+
+.god-message:nth-child(1) p {
+    animation: typing 2s steps(60, end) forwards 2s;
+}
+
+.god-message:nth-child(2) {
+    animation: slideInRight 0.5s ease-out forwards 5s;
+}
+
+.god-message:nth-child(2) .god-name {
+    animation: fadeIn 0.5s ease-out forwards 5.5s;
+}
+
+.god-message:nth-child(2) p {
+    animation: typing 2s steps(70, end) forwards 6s;
+}
+
+.god-message:nth-child(3) {
+    animation: slideInLeft 0.5s ease-out forwards 9s;
+}
+
+.god-message:nth-child(3) .god-name {
+    animation: fadeIn 0.5s ease-out forwards 9.5s;
+}
+
+.god-message:nth-child(3) p {
+    animation: typing 2s steps(100, end) forwards 10s;
+}
+
+.gods-dialogue.fade-out {
+    animation: fadeOut 0.5s ease-out forwards 13s;
+}
+
+.oracle-message {
+    color: #ffffff;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    opacity: 0;
+    position: fixed;
+    top: 65%;
+ left: 50%;
+    transform: translate(-50%, -50%);
+    animation: fadeInScale 1s ease-out forwards 15s;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.1),
+        inset 0 0 20px rgba(255, 215, 0, 0.1);
+    font-family: 'Times New Roman', serif;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    width: 90%;
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.continue-button {
+    background: linear-gradient(135deg, #D4AF37, #C5A028);
+    color: #ffffff;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    opacity: 0;
+    position: fixed;
+top: calc(65% + 180px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 280px;
+    z-index: 10;
+    pointer-events: none;
+    
+    /* Greek styling */
+    padding: 1rem 2rem;
+    font-family: 'Times New Roman', serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    /* Border and shadow */
+    border: 2px solid #D4AF37;
+    border-radius: 3px;
+    box-shadow: 
+        0 0 0 2px rgba(212, 175, 55, 0.3),
+        0 0 20px rgba(212, 175, 55, 0.2);
+    
+    /* Greek meander pattern */
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.1) 5px, rgba(255,255,255,0.1) 10px),
+        repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.1) 5px, rgba(255,255,255,0.1) 10px),
+        linear-gradient(135deg, #D4AF37, #C5A028);
+    
+    /* Animations */
+    animation: 
+        fadeInScale 1s ease-out forwards 17s,
+        buttonBreathing 3s ease-in-out infinite 18s;
+    
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.continue-button:hover {
+    filter: brightness(1.2);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.continue-button.active {
+    pointer-events: auto;
+}
+
+.continue-button span {
+    font-size: 1.3rem;
+    animation: swordPulse 2s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* Animations */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes buttonBreathing {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.03);
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes swordPulse {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(1.1);
+        filter: brightness(1.3);
+    }
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes typing {
+    from {
+        opacity: 1;
+        width: 0;
+        clip-path: inset(0 100% 0 0);
+    }
+    to {
+        opacity: 1;
+        width: 100%;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes avatarGlow {
+    0% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+/* Media Queries */
+@media (max-height: 700px) {
+    .oracle-message {
+        font-size: 1.2rem;
+        padding: 1rem;
+    }
+
+    .continue-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+        top: calc(65% + 160px);
+    }
+}
+
+@media (max-width: 480px) {
+    .oracle-message {
+        font-size: 1.1rem;
+        padding: 1rem;
+    }
+
+    .continue-button {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+}

@@ -1,0 +1,273 @@
+#encounter {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2c3e50, #27ae60);
+    display: none;
+    opacity: 0;
+}
+
+#encounter.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    opacity: 1;
+    padding: 60px 20px;
+}
+
+#encounter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(46, 204, 113, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 70% 70%, rgba(41, 128, 185, 0.1) 0%, transparent 60%);
+    animation: encounterAmbience 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#encounter-title {
+    color: #ffffff;
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 
+        0 2px 10px rgba(255, 255, 255, 0.2),
+        0 10px 30px rgba(255, 255, 255, 0.1);
+    animation: titleGlow 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+}
+
+#encounter-description {
+    color: #ffffff;
+    font-size: 1.5rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: descriptionFadeIn 1s ease-out forwards;
+    z-index: 2;
+}
+
+#encounter-choices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    padding: 2rem;
+    z-index: 2;
+}
+
+.encounter-choice {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: choiceFadeIn 0.5s ease-out forwards;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.encounter-choice:nth-child(1) { animation-delay: 0.2s; }
+.encounter-choice:nth-child(2) { animation-delay: 0.4s; }
+.encounter-choice:nth-child(3) { animation-delay: 0.6s; }
+
+.encounter-choice:hover {
+    transform: translateY(-5px);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        0 0 60px rgba(255, 255, 255, 0.1);
+}
+
+.choice-title {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+}
+
+.choice-description {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.choice-risk {
+    color: #e74c3c;
+    font-size: 1rem;
+    text-align: center;
+    font-style: italic;
+    padding: 0.5rem;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 10px;
+    margin-top: auto;
+}
+
+.choice-reward {
+    color: #2ecc71;
+    font-size: 1rem;
+    text-align: center;
+    font-style: italic;
+    padding: 0.5rem;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 10px;
+}
+
+.choice-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes encounterAmbience {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        text-shadow: 
+            0 2px 10px rgba(255, 255, 255, 0.2),
+            0 10px 30px rgba(255, 255, 255, 0.1);
+        letter-spacing: 4px;
+    }
+    50% {
+        text-shadow: 
+            0 5px 15px rgba(255, 255, 255, 0.3),
+            0 15px 40px rgba(255, 255, 255, 0.2);
+        letter-spacing: 6px;
+    }
+}
+
+@keyframes descriptionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes choiceFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #encounter.active {
+        padding: 40px 15px;
+    }
+
+    #encounter-title {
+        font-size: 2.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    #encounter-description {
+        font-size: 1.3rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    #encounter-choices {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .encounter-choice {
+        padding: 1.5rem;
+    }
+
+    .choice-title {
+        font-size: 1.6rem;
+    }
+
+    .choice-description {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #encounter.active {
+        padding: 30px 10px;
+    }
+
+    #encounter-title {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+    }
+
+    #encounter-description {
+        font-size: 1.1rem;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    #encounter-choices {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .encounter-choice {
+        padding: 1rem;
+    }
+
+    .choice-title {
+        font-size: 1.4rem;
+    }
+
+    .choice-icon {
+        font-size: 2.5rem;
+    }
+}

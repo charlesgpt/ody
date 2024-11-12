@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odyssey Finance</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="zeus-instructions.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="welcome.css">
+    <link rel="stylesheet" href="intro.css">
+    <link rel="stylesheet" href="oracle-bones.css">
+    <link rel="stylesheet" href="coin-flip.css">
+    <link rel="stylesheet" href="shop.css">
+    <link rel="stylesheet" href="encounter.css">
+    <link rel="stylesheet" href="results.css">
+  </head>
+  <body>
+    <div id="app">
+      <audio id="background-music" src="/sound.mp3" loop></audio>
+      <div id="game-container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+          <div class="welcome-background">
+            <img src="/first-screen/start-scren.webp" alt="Ocean Background" class="background-image">
+            <div class="ocean-overlay"></div>
+          </div>
+
+          <div class="welcome-content">
+            <div class="game-title">
+              <img src="/first-screen/title.png" alt="Odyssey Finance" class="title-image">
+            </div>
+            <div class="button-container">
+              <button class="icon-button settings-button" aria-label="Settings">
+                <img src="/first-screen/settings.png" alt="Settings">
+              </button>
+              <div class="start-button" onclick="startGameWithMusic()">
+                <img src="/first-screen/start-button.png" alt="Start Journey">
+              </div>
+              <button class="icon-button help-button" aria-label="Help">
+                <img src="/first-screen/help-button.png" alt="Help">
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Intro Scene -->
+        <div id="intro-scene" class="screen">
+          <div class="intro-background">
+            <img src="/first-screen/conversation.png" alt="Conversation Background" class="conversation-bg">
+            <div class="overlay"></div>
+          </div>
+
+    <div class="conversation-container">
+        <div class="narrative-text">
+            Ten years of war. One night of cunning. Troy burns, but the journey has just begun...
+        </div>
+
+        <div class="gods-dialogue">
+            <div class="god-message athena">
+                <div class="god-avatar">
+                    <img src="/gods/athena.png" alt="Athena" class="god-image">
+                </div>
+                <div class="message-content">
+                    <div class="god-name">Athena</div>
+                    <p>Their victory was mine. My wisdom built the horse. My guidance led them to triumph.</p>
+                </div>
+            </div>
+
+            <div class="god-message poseidon right">
+                <div class="god-avatar">
+                    <img src="/gods/poseidon.png" alt="Poseidon" class="god-image">
+                </div>
+                <div class="message-content">
+                    <div class="god-name">Poseidon</div>
+                    <p>Triumph? They looted my temples! They mocked a god! This is arrogance!</p>
+                </div>
+            </div>
+
+            <div class="god-message zeus">
+                <div class="god-avatar">
+                    <img src="/gods/zeus.png" alt="Zeus" class="god-image">
+                </div>
+                <div class="message-content">
+                    <div class="god-name">Zeus</div>
+                    <p>Enough! Let the mortals cast the bones. Fate will decide their journey.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="oracle-message">
+            <span>Cast the bones, mortals, and learn the cost of your return...</span>
+        </div>
+
+        <button class="continue-button" onclick="showScreen('oracle-bones')">
+            <span>⚔️</span>
+            Cast the Bones
+            <span>⚔️</span>
+        </button>
+    </div>
+</div>
+
+        <!-- Oracle's Bones Screen -->
+        <div id="oracle-bones" class="screen">
+          <h2>Cast the Oracle's Bones</h2>
+          <div id="dice-container">
+            <div class="dice">
+              <!-- Face 1 -->
+              <div class="dice-face front">
+                <div class="dice-dot"></div>
+              </div>
+              <!-- Face 2 -->
+              <div class="dice-face back">
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+              </div>
+              <!-- Face 3 -->
+              <div class="dice-face right">
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+              </div>
+              <!-- Face 4 -->
+              <div class="dice-face left">
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+              </div>
+              <!-- Face 5 -->
+              <div class="dice-face top">
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+              </div>
+              <!-- Face 6 -->
+              <div class="dice-face bottom">
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+                <div class="dice-dot"></div>
+              </div>
+            </div>
+          </div>
+          <button id="roll-dice" onclick="rollDice()">Cast the Bones</button>
+        </div>
+
+        <!-- Other screens remain unchanged -->
+        <!-- Zeus Instructions Screen -->
+        <div id="zeus-instructions" class="screen zeus-instructions">
+          <div class="zeus-background">
+            <div class="zeus-bg"></div>
+            <div class="zeus-overlay"></div>
+          </div>
+          <div class="zeus-content">
+            <div class="zeus-avatar">
+              <img src="/gods/zeus.png" alt="Zeus">
+            </div>
+            <h2 class="zeus-title">Zeus</h2>
+            <div class="zeus-message">
+              Mortal, you have earned your initial fortune through the Oracle's bones. Now, test your wisdom in the game of chance.
+              <br><br>
+              Choose your wager wisely. The coin of destiny has two faces:
+              <br><br>
+              • Heads will double your bet<br>
+              • Tails will cost you your wager
+              <br><br>
+              Remember, fortune favors the bold, but hubris leads to ruin.
+            </div>
+            <button class="zeus-continue-button" onclick="showScreen('coin-flip')">BEGIN THE TRIAL</button>
+          </div>
+        </div>
+
+        <div id="coin-flip" class="screen">
+          <h2>Test Your Fortune</h2>
+          <div class="gold-display">Gold: <span class="gold-amount">0</span></div>
+          <div id="coin">
+            <div class="coin-face heads">
+              <span>H</span>
+            </div>
+            <div class="coin-face tails">
+              <span>T</span>
+            </div>
+            <!-- Add coin edges for 3D effect -->
+            <div class="coin-edge" style="transform: rotateY(0deg) translateX(95px)"></div>
+            <div class="coin-edge" style="transform: rotateY(30deg) translateX(95px)"></div>
+            <div class="coin-edge" style="transform: rotateY(60deg) translateX(95px)"></div>
+            <div class="coin-edge" style="transform: rotateY(90deg) translateX(95px)"></div>
+            <div class="coin-edge" style="transform: rotateY(120deg) translateX(95px)"></div>
+            <div class="coin-edge" style="transform: rotateY(150deg) translateX(95px)"></div>
+          </div>
+          <div id="betting-controls">
+            <input type="number" id="bet-amount" placeholder="Enter your bet amount" min="0">
+            <button id="flip-coin" onclick="flipCoin()">Flip the Coin</button>
+          </div>
+        </div>
+
+        <div id="shop" class="screen">
+          <h2>Merchant's Shop</h2>
+          <div id="gold-display">Gold: <span class="gold-amount">0</span></div>
+          <div id="items-grid">
+            <div class="shop-item">
+              <div class="item-icon">⚔️</div>
+              <div class="item-name">Trading Power</div>
+              <div class="item-description">Increase your trading power by 20%. Each trade will yield more profits.</div>
+              <div class="item-price">500 Gold</div>
+              <button class="buy-button" onclick="buyItem('tradingPower', 500)">Buy</button>
+            </div>
+            
+            <div class="shop-item">
+              <div class="item-icon">🛡️</div>
+              <div class="item-name">Loss Protection</div>
+              <div class="item-description">Reduce potential losses by 15%. A safety net for risky trades.</div>
+              <div class="item-price">400 Gold</div>
+              <button class="buy-button" onclick="buyItem('lossReduction', 400)">Buy</button>
+            </div>
+            
+            <div class="shop-item">
+              <div class="item-icon">🎯</div>
+              <div class="item-name">Trading Accuracy</div>
+              <div class="item-description">Improve your trading accuracy by 25%. Better chances of successful trades.</div>
+              <div class="item-price">600 Gold</div>
+              <button class="buy-button" onclick="buyItem('accuracy', 600)">Buy</button>
+            </div>
+            
+            <div class="shop-item">
+              <div class="item-icon">⚖️</div>
+              <div class="item-name">Volatility Control</div>
+              <div class="item-description">Reduce market volatility by 20%. More stable trading conditions.</div>
+              <div class="item-price">450 Gold</div>
+              <button class="buy-button" onclick="buyItem('volatilityControl', 450)">Buy</button>
+            </div>
+          </div>
+          
+          <button id="continue-shopping" onclick="showScreen('encounter')">Continue Journey</button>
+        </div>
+
+        <div id="encounter" class="screen">
+          <!-- Encounter content remains unchanged -->
+        </div>
+
+        <div id="results" class="screen">
+          <!-- Results content remains unchanged -->
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

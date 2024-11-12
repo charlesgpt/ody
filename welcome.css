@@ -1,0 +1,280 @@
+#welcome-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+    opacity: 0;
+}
+
+#welcome-screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.welcome-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: subtlePulse 8s ease-in-out infinite;
+}
+
+.ocean-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    animation: oceanFlow 10s ease-in-out infinite;
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    margin-top: 5vh;
+}
+
+.game-title {
+    position: relative;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: titleReveal 1s ease-out forwards 0.5s;
+}
+
+.title-image {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    animation: titleGlow 3s ease-in-out infinite;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: buttonsReveal 1s ease-out forwards 1s;
+    margin-top: 2rem;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.icon-button img {
+    width: 50px;
+    height: 50px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: all 0.3s ease;
+}
+
+.icon-button:hover img {
+    transform: scale(1.1);
+    filter: 
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))
+        brightness(1.2);
+}
+
+.start-button {
+    display: block;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    margin: 0 2rem;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.start-button img {
+    width: 180px;
+    height: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    transition: all 0.3s ease;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.start-button:hover img {
+    transform: translateY(-5px);
+    filter: 
+        drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5))
+        brightness(1.2);
+}
+
+.start-button:active img {
+    transform: translateY(0);
+    filter: 
+        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))
+        brightness(1.1);
+}
+
+.start-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 80px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(ellipse, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.start-button:hover::after {
+    opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes titleReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonsReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes subtlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes oceanFlow {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.2;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 0.3;
+    }
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+    50% {
+        filter: 
+            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))
+            drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .welcome-content {
+        margin-top: 4vh;
+        gap: 2.5rem;
+    }
+
+    .title-image {
+        max-width: 300px;
+    }
+
+    .button-container {
+        gap: 1.5rem;
+    }
+
+    .icon-button img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .start-button img {
+        width: 140px;
+    }
+
+    .start-button::after {
+        width: 160px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-content {
+        margin-top: 3vh;
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .title-image {
+        max-width: 250px;
+    }
+
+    .button-container {
+        gap: 1rem;
+    }
+
+    .icon-button img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .start-button img {
+        width: 120px;
+    }
+
+    .start-button::after {
+        width: 140px;
+        height: 60px;
+    }
+}

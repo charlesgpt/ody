@@ -1,0 +1,294 @@
+#oracle-bones {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: none;
+    opacity: 0;
+    overflow: hidden;
+}
+
+#oracle-bones::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/first-screen/oracle.jpg') no-repeat center center;
+    background-size: cover;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 1s ease-out;
+}
+
+#oracle-bones::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(26, 42, 61, 0.8) 0%, rgba(13, 20, 32, 0.9) 100%);
+    z-index: 2;
+}
+
+#oracle-bones.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+#oracle-bones.active::before {
+    opacity: 0.6;
+    animation: fadeInBackground 1s ease-out forwards;
+}
+
+#oracle-bones h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    animation: titleGlow 2s ease-in-out infinite;
+    position: relative;
+    z-index: 3;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: titleReveal 1s ease-out forwards 0.5s;
+}
+
+#dice-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    perspective: 1000px;
+    margin: 2rem auto;
+    z-index: 3;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: diceReveal 1s ease-out forwards 0.8s;
+}
+
+.dice {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 2s ease-out;
+}
+
+.dice.rolling {
+    animation: roll 2s linear;
+}
+
+.dice-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10%;
+    box-shadow: 
+        inset 0 0 15px rgba(0, 0, 0, 0.1),
+        0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.dice-dot {
+    width: 20%;
+    height: 20%;
+    background: #1a2a3d;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Face positions remain unchanged */
+.dice-face.front { transform: translateZ(100px); }
+.dice-face.back { transform: rotateX(180deg) translateZ(100px); }
+.dice-face.right { transform: rotateY(90deg) translateZ(100px); }
+.dice-face.left { transform: rotateY(-90deg) translateZ(100px); }
+.dice-face.top { transform: rotateX(90deg) translateZ(100px); }
+.dice-face.bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+#roll-dice {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: #ffffff;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    position: relative;
+    z-index: 3;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: buttonReveal 1s ease-out forwards 1.1s;
+}
+
+#roll-dice:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+#roll-dice:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.dice-result {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-align: center;
+    white-space: nowrap;
+    animation: fadeInUp 0.5s ease-out forwards;
+    z-index: 3;
+}
+
+.result-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 215, 0, 0.8);
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    color: #ffffff;
+    font-size: 1.5rem;
+    text-align: center;
+    z-index: 1000;
+    animation: fadeInScale 0.5s ease-out forwards;
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.3),
+        inset 0 0 10px rgba(255, 215, 0, 0.2),
+        0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes fadeInBackground {
+    from { opacity: 0; }
+    to { opacity: 0.6; }
+}
+
+@keyframes titleReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes diceReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buttonReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes roll {
+    0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+    100% { transform: rotateX(720deg) rotateY(720deg) rotateZ(720deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    50% { text-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.7),
+        0 0 30px rgba(255, 255, 255, 0.3);
+    }
+    100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #oracle-bones h2 {
+        font-size: 2rem;
+    }
+
+    #dice-container {
+        width: 150px;
+        height: 150px;
+    }
+
+    .dice-face {
+        padding: 8%;
+    }
+
+    #roll-dice {
+        padding: 0.8rem 1.6rem;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #oracle-bones h2 {
+        font-size: 1.8rem;
+    }
+
+    #dice-container {
+        width: 120px;
+        height: 120px;
+    }
+
+    .dice-face {
+        padding: 6%;
+    }
+
+    #roll-dice {
+        padding: 0.7rem 1.4rem;
+        font-size: 1rem;
+    }
+}
