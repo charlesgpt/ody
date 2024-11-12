@@ -147,6 +147,28 @@ button:disabled {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Persistent Settings Button */
+.persistent-settings-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.persistent-settings-button:hover {
+    transform: scale(1.1);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
 /* Result messages */
 .dice-result,
 .bet-result,

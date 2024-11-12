@@ -10,7 +10,7 @@ load_dotenv()
 
 # Get token from environment variable
 TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-WEBAPP_URL = os.getenv('WEBAPP_URL', 'https://ody.pumpdao.fun')
+WEBAPP_URL = os.getenv('WEBAPP_URL', 'https://your-deployed-game-url.com')
 
 # Configure logging
 logging.basicConfig(

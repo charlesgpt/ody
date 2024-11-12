@@ -19,6 +19,9 @@
   </head>
   <body>
     <div id="app">
+      <button class="persistent-settings-button settings-button" aria-label="Settings">
+        <img src="/first-screen/settings.png" alt="Settings" style="width: 24px; height: 24px; filter: invert(1);">
+      </button>
       <audio id="background-music" src="/sound.mp3" loop></audio>
       <div id="game-container">
         <!-- Welcome Screen -->
@@ -33,9 +36,6 @@
               <img src="/first-screen/title.png" alt="Odyssey Finance" class="title-image">
             </div>
             <div class="button-container">
-              <button class="icon-button settings-button" aria-label="Settings">
-                <img src="/first-screen/settings.png" alt="Settings">
-              </button>
               <div class="start-button" onclick="startGameWithMusic()">
                 <img src="/first-screen/start-button.png" alt="Start Journey">
               </div>

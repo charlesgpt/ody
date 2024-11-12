@@ -8,6 +8,7 @@ if (backgroundMusic) {
     backgroundMusic.volume = 0.5;
     backgroundMusic.loop = true;
     backgroundMusic.muted = false;
+    window.backgroundMusic = backgroundMusic; // Make it accessible globally
 }
 
 function initializeAudio() {
@@ -75,11 +76,16 @@ let gameState = {
 
 // Dice rolling functionality
 function updateGoldDisplay() {
-    const goldDisplayElements = document.querySelectorAll('.gold-amount, #gold-amount');
-    if (goldDisplayElements.length > 0) {
-        goldDisplayElements.forEach(display => display.textContent = gameState.gold);
-        debug(`Updated gold display to: ${gameState.gold}`);
+    debug(`Updating gold display. Current gold: ${gameState.gold}`);
+    const goldDisplays = document.querySelectorAll('.gold-amount');
+    if (goldDisplays.length === 0) {
+        debug('No gold displays found');
+        return;
     }
+    goldDisplays.forEach(display => {
+        display.textContent = gameState.gold;
+        debug(`Updated gold display element: ${display.textContent}`);
+    });
 }
 
 function flipCoin() {
@@ -87,7 +93,6 @@ function flipCoin() {
     
     if (gameState.coinFlipsRemaining <= 0) {
         debug('No more coin flips remaining, transitioning to shop...');
-        alert('You have used all your coin flips! Moving to the next stage...');
         setTimeout(() => showScreen('shop'), 500);
         return;
     }
@@ -109,8 +114,17 @@ function flipCoin() {
         const winnings = result === 'heads' ? betAmount * 2 : -betAmount;
         gameState.gold += winnings;
         
-        const resultMessage = `You ${winnings > 0 ? 'won' : 'lost'} ${Math.abs(winnings)} gold!`;
-        alert(resultMessage);
+        if (gameState.gold <= 0) {
+            // Game over - player lost all gold
+            alert('You have lost all your gold! The gods give you another chance...');
+            // Reset game state
+            gameState.gold = 0;
+            gameState.coinFlipsRemaining = 2;
+            gameState.inventory = new Set();
+            gameState.powerups = { tradingPower: 0, lossReduction: 0, accuracy: 0, volatilityControl: 0 };
+            showScreen('welcome-screen');
+            return;
+        }
         
         updateGoldDisplay();
         coin.classList.remove('flipping');
@@ -121,7 +135,6 @@ function flipCoin() {
         if (gameState.coinFlipsRemaining === 0) {
             setTimeout(() => {
                 debug('Last coin flip completed, transitioning to shop...');
-                alert('Moving to the Merchant\'s Shop...');
                 setTimeout(() => showScreen('shop'), 500);
             }, 1000);
         }
@@ -257,10 +270,7 @@ function showScreen(screenId) {
                         if (screenId === 'shop' || screenId === 'coin-flip') {
                             debug(`Updating gold display for ${screenId}. Current gold: ${gameState.gold}`);
                             updateGoldDisplay();
-                            if (screenId === 'shop') {
-                                debug(`Initializing shop screen... Gold: ${gameState.gold}`);
-                                updateShopButtons();
-                            }
+                            if (screenId === 'shop') updateShopButtons();
                         }
                     } else {
                         console.error(`Screen with id "${screenId}" not found in the DOM`);
@@ -268,7 +278,6 @@ function showScreen(screenId) {
                 }, 300);
             }, 50);
         }, 100);
-    } else {
         debug('No active screen found');
     }
 }
@@ -391,24 +400,35 @@ function initializeEventListeners() {
     // Settings button click handler
     const settingsButton = document.querySelector('.settings-button');
     if (settingsButton) {
+        let currentMusicVolume = 0.5;
+        let currentSFXVolume = 0.5;
+
         settingsButton.addEventListener('click', () => {
             debug('Settings button clicked');
             const settingsModal = document.createElement('div');
             settingsModal.className = 'modal settings-modal';
             settingsModal.innerHTML = `
                 <div class="modal-content">
-                    <h2>Settings</h2>
+                    <h2 style="text-align: center; margin-bottom: 20px;">Settings</h2>
                     <div class="settings-options">
                         <div class="setting-item">
-                            <label>Music Volume</label>
-                            <input type="range" min="0" max="100" value="50">
+                            <label style="display: block; margin-bottom: 10px;">Music Volume</label>
+                            <input type="range" min="0" max="100" value="${currentMusicVolume * 100}" class="music-volume">
                         </div>
                         <div class="setting-item">
-                            <label>Sound Effects</label>
-                            <input type="range" min="0" max="100" value="50">
+                            <label style="display: block; margin-bottom: 10px;">Sound Effects</label>
+                            <input type="range" min="0" max="100" value="${currentSFXVolume * 100}" class="sfx-volume">
                         </div>
                     </div>
-                    <button class="close-modal">Close</button>
+                    <button class="close-modal" style="
+                        background: linear-gradient(135deg, #2ecc71, #27ae60);
+                        color: #ffffff;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 15px;
+                        margin-top: 20px;
+                        width: 100%;
+                    ">Close</button>
                 </div>
             `;
             document.body.appendChild(settingsModal);
@@ -418,6 +438,24 @@ function initializeEventListeners() {
             closeButton.addEventListener('click', () => {
                 settingsModal.style.opacity = '0';
                 setTimeout(() => settingsModal.remove(), 300);
+            });
+
+            // Handle volume changes
+            const musicSlider = settingsModal.querySelector('.music-volume');
+            const sfxSlider = settingsModal.querySelector('.sfx-volume');
+
+            musicSlider.addEventListener('input', (e) => {
+                currentMusicVolume = e.target.value / 100;
+                if (window.backgroundMusic) {
+                    window.backgroundMusic.volume = currentMusicVolume;
+                }
+                debug(`Music volume set to: ${currentMusicVolume}`);
+            });
+
+            sfxSlider.addEventListener('input', (e) => {
+                currentSFXVolume = e.target.value / 100;
+                // Update volume for button clicks and other sound effects
+                debug(`SFX volume set to: ${currentSFXVolume}`);
             });
         });
     }
