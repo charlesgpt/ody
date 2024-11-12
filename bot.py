@@ -2,10 +2,9 @@ import os
 import json
 import logging
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import (
-    ApplicationBuilder, CommandHandler, MessageHandler, CallbackContext, filters
-)
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext, MessageHandler, filters
 from dotenv import load_dotenv
+import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -22,7 +21,6 @@ logger = logging.getLogger(__name__)
 # Store user game states
 user_states = {}
 
-# Define the start command handler
 async def start(update: Update, context: CallbackContext) -> None:
     """Send a message with a button that opens the web app."""
     keyboard = [[InlineKeyboardButton(
@@ -39,7 +37,6 @@ async def start(update: Update, context: CallbackContext) -> None:
         reply_markup=reply_markup
     )
 
-# Define the handler for incoming web app data
 async def handle_webapp_data(update: Update, context: CallbackContext) -> None:
     """Save the user's game state."""
     try:
@@ -60,25 +57,64 @@ async def handle_webapp_data(update: Update, context: CallbackContext) -> None:
         )
         
         for powerup, value in powerups.items():
-            message += f"  - {powerup}: {value}\n"
+            message += f"  • {powerup}: {value}\n"
+        
+        keyboard = [[InlineKeyboardButton(
+            "Continue Journey",
+            web_app=WebAppInfo(url=f"{WEBAPP_URL}?state={user_id}")
+        )]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-        await update.message.reply_text(message)
+        await update.message.reply_text(message, reply_markup=reply_markup)
+        logger.info(f"Saved game state for user {user_id}")
     except Exception as e:
-        logger.error(f"Error processing web app data: {e}")
-        await update.message.reply_text("An error occurred while saving your progress.")
+        logger.error(f"Error saving game state: {e}")
+        await update.message.reply_text(
+            "⚠️ Failed to save game state. Please try again."
+        )
 
-# Main function to set up and run the bot
+async def load_game_state(update: Update, context: CallbackContext) -> None:
+    """Load the user's game state."""
+    user_id = update.effective_user.id
+    if user_id in user_states:
+        state_data = user_states[user_id]
+        keyboard = [[InlineKeyboardButton(
+            "Resume Journey",
+            web_app=WebAppInfo(url=f"{WEBAPP_URL}?state={user_id}")
+        )]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        await update.message.reply_text(
+            "🎮 Found your saved progress! Click below to continue your odyssey:",
+            reply_markup=reply_markup
+        )
+    else:
+        await update.message.reply_text(
+            "🔍 No saved game found. Use /start to begin a new journey!"
+        )
+
 async def main():
-    # Create the application and pass in the bot token
+    """Start the bot and handle commands."""
+    if not TOKEN:
+        logger.error("No token provided!")
+        return
+
     app = ApplicationBuilder().token(TOKEN).build()
-    
-    # Add command and message handlers
+
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("load", load_game_state))
     app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data))
-    
-    # Run the bot until interrupted
+
+    logger.info("Bot started!")
     await app.run_polling()
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except RuntimeError as e:
+        if str(e) == "Cannot close a running event loop":
+            loop = asyncio.get_running_loop()
+            loop.create_task(main())
+            loop.run_forever()
+        else:
+            raise e
