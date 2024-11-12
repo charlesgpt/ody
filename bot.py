@@ -4,7 +4,6 @@ import logging
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext, MessageHandler, filters
 from dotenv import load_dotenv
-import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -93,32 +92,23 @@ async def load_game_state(update: Update, context: CallbackContext) -> None:
             "🔍 No saved game found. Use /start to begin a new journey!"
         )
 
-async def main():
-    """Start the bot and handle commands."""
+def run_bot():
+    """Initialize and run the bot."""
     if not TOKEN:
         logger.error("No token provided!")
         return
 
     app = ApplicationBuilder().token(TOKEN).build()
 
+    # Add handlers
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("load", load_game_state))
     app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data))
 
     logger.info("Bot started!")
-    await app.run_polling()
+    
+    # Run the bot
+    app.run_polling(stop_signals=None)
 
 if __name__ == "__main__":
-    try:
-        # Check for an existing event loop and run main accordingly
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        loop = None
-
-    if loop and loop.is_running():
-        # If there’s an existing running event loop, create a task for main
-        loop.create_task(main())
-        loop.run_forever()
-    else:
-        # Otherwise, run main as usual
-        asyncio.run(main())
+    run_bot()
