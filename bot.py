@@ -9,7 +9,7 @@ import asyncio
 # Load environment variables
 load_dotenv()
 TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-WEBAPP_URL = os.getenv('WEBAPP_URL', 'https://ody.pumpdao.fun/')
+WEBAPP_URL = os.getenv('WEBAPP_URL', 'https://ody.pumpdao.fun')
 
 # Configure logging
 logging.basicConfig(
@@ -110,11 +110,15 @@ async def main():
 
 if __name__ == "__main__":
     try:
+        # Check for an existing event loop and run main accordingly
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop and loop.is_running():
+        # If there’s an existing running event loop, create a task for main
+        loop.create_task(main())
+        loop.run_forever()
+    else:
+        # Otherwise, run main as usual
         asyncio.run(main())
-    except RuntimeError as e:
-        if str(e) == "Cannot close a running event loop":
-            loop = asyncio.get_running_loop()
-            loop.create_task(main())
-            loop.run_forever()
-        else:
-            raise e
